@@ -5,7 +5,7 @@ namespace Application.Api.Services.Products;
 
 public class ProductsService : IProductsService
 {
-    // TODO: Make is Authorized only
+    // TODO: Make this Authorized only
     private readonly ApplicationContext _context;
 
     public ProductsService(ApplicationContext context)
