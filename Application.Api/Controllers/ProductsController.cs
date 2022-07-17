@@ -8,6 +8,7 @@ namespace Application.Api.Controllers;
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
+    // TODO: Make this Authorized only
     private readonly IProductsService _productService;
 
     public ProductsController(IProductsService productsService)
@@ -31,10 +32,17 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("o")]
+    [Route("get")]
     public Product GetProduct(int id)
     {
         return _productService.GetProduct(id);
+    }
+    
+    [HttpGet]
+    [Route("searchByName")]
+    public List<Product> GetProductsByName(string name)
+    {
+        return _productService.GetProductsByName(name);
     }
 
     [HttpDelete]

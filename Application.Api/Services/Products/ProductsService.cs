@@ -5,7 +5,6 @@ namespace Application.Api.Services.Products;
 
 public class ProductsService : IProductsService
 {
-    // TODO: Make this Authorized only
     private readonly ApplicationContext _context;
 
     public ProductsService(ApplicationContext context)
@@ -22,6 +21,20 @@ public class ProductsService : IProductsService
     {
         var result = _context.Products.Find(id) ?? new Product();
         return result;
+    }
+
+    public List<Product> GetProductsByName(string name)
+    {
+        try
+        {
+            var result = _context.Products.Where(p => p.Name.Contains(name));
+            return result.ToList();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return new List<Product>();
+        }
     }
 
     public void AddProduct(Product product)
