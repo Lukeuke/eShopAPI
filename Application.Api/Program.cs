@@ -1,5 +1,6 @@
 using Application.Api.Data;
 using Application.Api.Models;
+using Application.Api.Services.Data;
 using Application.Api.Services.Products;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<ApplicationContext>(o
 // Add Services
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

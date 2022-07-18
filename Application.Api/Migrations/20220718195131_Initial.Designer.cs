@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Api.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220717173050_Initial")]
+    [Migration("20220718195131_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,7 +22,7 @@ namespace Application.Api.Migrations
                 .HasAnnotation("ProductVersion", "6.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseSerialColumns(modelBuilder);
 
             modelBuilder.Entity("Application.Api.Models.Product", b =>
                 {
@@ -30,7 +30,7 @@ namespace Application.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -43,17 +43,17 @@ namespace Application.Api.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid?>("UsersId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Application.Api.Models.Users", b =>
+            modelBuilder.Entity("Application.Api.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,12 +87,12 @@ namespace Application.Api.Migrations
 
             modelBuilder.Entity("Application.Api.Models.Product", b =>
                 {
-                    b.HasOne("Application.Api.Models.Users", null)
+                    b.HasOne("Application.Api.Models.User", null)
                         .WithMany("Products")
-                        .HasForeignKey("UsersId");
+                        .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Application.Api.Models.Users", b =>
+            modelBuilder.Entity("Application.Api.Models.User", b =>
                 {
                     b.Navigation("Products");
                 });

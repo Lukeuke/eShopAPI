@@ -23,7 +23,7 @@ public class AuthenticationService : IAuthenticationService
         if (_context.Users.Any(u => u.Username == username))
             return (false, "Username not available");
 
-        var user = new Users
+        var user = new User
         {
             Username = username,
             PasswordHash = password,
@@ -66,7 +66,7 @@ public class AuthenticationService : IAuthenticationService
         return tokenHandler.WriteToken(token);
     }
 
-    private ClaimsIdentity AssembleClaimsIdentity(Users user)
+    private ClaimsIdentity AssembleClaimsIdentity(User user)
     {
         var subject = new ClaimsIdentity(new[]
         {

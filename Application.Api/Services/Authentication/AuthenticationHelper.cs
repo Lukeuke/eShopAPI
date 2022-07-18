@@ -24,7 +24,7 @@ public static class AuthenticationHelper
         return Convert.ToBase64String(bytes);
     }
 
-    public static void ProvideSaltAndHash(this Users user)
+    public static void ProvideSaltAndHash(this User user)
     {
         var salt = GenerateSalt(24);
         user.Salt = Convert.ToBase64String(salt);

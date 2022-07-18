@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Application.Api.Models;
 
-public class Users
+public class User
 {
     [Key]
     public Guid Id { get; set; }
