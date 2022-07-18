@@ -28,7 +28,7 @@ public class AuthenticationService : IAuthenticationService
             Username = username,
             PasswordHash = password,
             Name = name,
-            Surname = surname
+            Surname = surname,
         };
 
         user.ProvideSaltAndHash();
