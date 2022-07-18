@@ -16,5 +16,5 @@ public class Users
     public string PasswordHash { get; set; }
     public string Salt { get; set; }
 
-    public List<Product> Products { get; set; }
+    public List<Product>? Products { get; set; }
 }

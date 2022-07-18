@@ -1,8 +1,16 @@
 using Application.Api.Data;
+using Application.Api.Models;
 using Application.Api.Services.Products;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using AuthenticationService = Application.Api.Services.Authentication.AuthenticationService;
+using IAuthenticationService = Application.Api.Services.Authentication.IAuthenticationService;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var settings = new Settings();
+builder.Configuration.Bind("Settings", settings);
+builder.Services.AddSingleton(settings);
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -13,6 +21,7 @@ builder.Services.AddDbContext<ApplicationContext>(o
 
 // Add Services
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
