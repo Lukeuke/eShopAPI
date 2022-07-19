@@ -25,6 +25,13 @@ public class OrderController : ControllerBase
     public IActionResult AddProduct(int id, Guid userId)
     {
         _orderService.AddProduct(id, userId);
-        return Ok("Product has been added to your cart");
+        return Ok(new { Message = "Product has been added to your cart" });
+    }
+    
+    [HttpDelete("remove")]
+    public IActionResult RemoveProduct(int id, Guid userId)
+    {
+        _orderService.RemoveProduct(id, userId);
+        return Ok(new { Message = "Product has been removed from your cart" });
     }
 }

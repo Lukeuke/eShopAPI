@@ -25,4 +25,10 @@ public class OrderService : IOrderService
     {
         return _orderBuilder.GetOrder(id);
     }
+
+    public void RemoveProduct(int id, Guid userId)
+    {
+        var product = _productsService.GetProduct(id);
+        _orderBuilder.RemoveProduct(product, userId);
+    }
 }

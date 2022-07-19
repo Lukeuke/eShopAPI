@@ -14,6 +14,12 @@ public class ApplicationContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.UseSerialColumns();
+
+        modelBuilder.Entity<User>(eb =>
+        {
+            eb.HasMany(u => u.Products).WithMany(p => p.Users);
+        });
+
     }
 
     public DbSet<User> Users { get; set; }

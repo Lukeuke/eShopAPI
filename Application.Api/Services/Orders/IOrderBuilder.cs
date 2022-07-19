@@ -6,5 +6,6 @@ namespace Application.Api.Services.Orders;
 public interface IOrderBuilder
 {
     void AddProduct(Product product, Guid id);
-    public Order GetOrder(Guid id);
+     Order GetOrder(Guid id);
+     void RemoveProduct(Product product, Guid id);
 }

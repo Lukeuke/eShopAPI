@@ -15,4 +15,6 @@ public class User
     public string Surname { get; set; }
     public string PasswordHash { get; set; }
     public string Salt { get; set; }
+
+    public List<Product>? Products { get; set; }
 }
