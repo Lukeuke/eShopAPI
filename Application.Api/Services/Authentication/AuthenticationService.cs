@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Api.Authorization;
 using Application.Api.Data;
 using Application.Api.Models;
 using Microsoft.IdentityModel.Tokens;
@@ -29,6 +30,7 @@ public class AuthenticationService : IAuthenticationService
             PasswordHash = password,
             Name = name,
             Surname = surname,
+            Roles = new List<ERoles> { ERoles.User }
         };
 
         user.ProvideSaltAndHash();

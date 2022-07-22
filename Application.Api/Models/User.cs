@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Api.Authorization;
 
 namespace Application.Api.Models;
 
@@ -17,4 +18,6 @@ public class User
     public string Salt { get; set; }
 
     public List<Product>? Products { get; set; }
+
+    public List<ERoles> Roles { get; init; }
 }

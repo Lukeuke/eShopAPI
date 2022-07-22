@@ -44,6 +44,7 @@ public class AuthenticationController : ControllerBase
         return Ok(new LoginResponseDto
         {
             Id = id,
+            Roles = _dbService.GetRolesFromDb(id),
             Token = new TokenDto
             {
                 Token = content
