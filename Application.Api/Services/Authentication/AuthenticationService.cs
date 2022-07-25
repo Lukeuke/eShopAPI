@@ -19,10 +19,12 @@ public class AuthenticationService : IAuthenticationService
         _context = context;
     }
     
-    public (bool success, string content) Register(string username, string password, string name, string surname)
+    public (bool success, object content) Register(string username, string password, string name, string surname)
     {
         if (_context.Users.Any(u => u.Username == username))
-            return (false, "Username not available");
+            return (false, new { message = "Username not available"} );
+
+        if (password.Length < 8) return (false, new { message = "Password should be at least 8 characters long!" });
 
         var user = new User
         {
@@ -41,14 +43,14 @@ public class AuthenticationService : IAuthenticationService
         return (true, string.Empty);
     }
 
-    public (bool success, string content) Login(string username, string password)
+    public (bool success, object content) Login(string username, string password)
     {
         var user = _context.Users.SingleOrDefault(p => p.Username == username);
 
-        if (user == null) return (false, "Invalid username");
+        if (user == null) return (false, new { message = "Invalid username" });
 
         if (user.PasswordHash != AuthenticationHelper.GenerateHash(password, user.Salt))
-            return (false, "Invalid password");
+            return (false, new { message = "Invalid password" });
 
         return (true, GenerateJwt(AssembleClaimsIdentity(user)));
     }

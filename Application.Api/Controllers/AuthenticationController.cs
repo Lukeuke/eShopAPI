@@ -22,7 +22,7 @@ public class AuthenticationController : ControllerBase
     public IActionResult Register(RegisterRequestDto requestDto)
     {
         var (success, content) = _authService.Register(requestDto.Username, requestDto.Password, requestDto.Name, requestDto.Surname);
-        if (!success) return BadRequest();
+        if (!success) return BadRequest(content);
 
         var loginDto = new LoginRequestDto
         {
@@ -47,7 +47,7 @@ public class AuthenticationController : ControllerBase
             Roles = _dbService.GetRolesFromDb(id),
             Token = new TokenDto
             {
-                Token = content
+                Token = content.ToString()!
             }
         });
     }
