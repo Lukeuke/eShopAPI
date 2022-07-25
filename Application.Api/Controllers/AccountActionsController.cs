@@ -15,7 +15,7 @@ public class AccountActionsController : ControllerBase
         _actionsService = actionsService;
     }
 
-    [HttpPut]
+    [HttpPatch]
     [Route("ChangePassword")]
     public IActionResult ChangePassword([FromQuery] Guid id, [FromBody] ChangePasswordRequestDto requestDto)
     {
@@ -30,9 +30,19 @@ public class AccountActionsController : ControllerBase
 
     [HttpDelete]
     [Route("Delete")]
-    public IActionResult DeleteAccount([FromQuery] Guid id, [FromBody] DeleteAccountRequestDto requestDto)
+    public IActionResult DeleteAccount([FromQuery] Guid id, [FromBody] PasswordRequestDto requestDto)
     {
         var (success, content) = _actionsService.DeleteAccount(id, requestDto.Password);
+        if (!success) return BadRequest(content);
+
+        return Ok(content);
+    }
+
+    [HttpPatch]
+    [Route("ChangeUsername")]
+    public IActionResult ChangeUsername(Guid id, string username, [FromBody] PasswordRequestDto requestDto)
+    {
+        var (success, content) = _actionsService.ChangeUsername(id, requestDto.Password, username);
         if (!success) return BadRequest(content);
 
         return Ok(content);

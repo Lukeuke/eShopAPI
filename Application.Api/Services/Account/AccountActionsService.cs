@@ -1,5 +1,4 @@
 using Application.Api.Data;
-using Application.Api.Models;
 using Application.Api.Services.Authentication;
 
 namespace Application.Api.Services.Account;
@@ -41,5 +40,19 @@ public class AccountActionsService : IAccountActionsService
         _context.SaveChanges();
 
         return (true, new {message = "User was successfully removed"});
+    }
+
+    public (bool success, object content) ChangeUsername(Guid id, string password, string username)
+    {
+        var user = _context.Users.FirstOrDefault(u => u.Id == id);
+        if (user is null) return (false, new { message = $"user with this id: {id} does not exits"});
+        
+        if (user.PasswordHash != AuthenticationHelper.GenerateHash(password, user.Salt)) return ( false, new {message = "Passwords are not the same"});
+
+        user.Username = username;
+
+        _context.SaveChanges();
+        
+        return (true, new {message = "Username was successfully changed"});
     }
 }

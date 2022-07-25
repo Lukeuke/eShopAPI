@@ -1,6 +1,6 @@
 namespace Application.Api.DTOs.Account;
 
-public class DeleteAccountRequestDto
+public class PasswordRequestDto
 {
     public string Password { get; set; }
 }
