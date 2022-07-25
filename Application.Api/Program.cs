@@ -1,6 +1,7 @@
 using System.Text;
 using Application.Api.Data;
 using Application.Api.Models;
+using Application.Api.Services.Account;
 using Application.Api.Services.Data;
 using Application.Api.Services.Orders;
 using Application.Api.Services.Products;
@@ -29,6 +30,7 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderBuilder, OrderBuilder>();
+builder.Services.AddScoped<IAccountActionsService, AccountActionsService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
     options.TokenValidationParameters = new TokenValidationParameters
