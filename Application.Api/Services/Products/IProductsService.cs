@@ -9,4 +9,5 @@ public interface IProductsService
     List<Product> GetProductsByName(string name);
     void AddProduct(Product product);
     void RemoveProduct(int id);
+    (bool success, object content) UpdateProduct(Product product);
 }

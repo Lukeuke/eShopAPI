@@ -71,4 +71,25 @@ public class ProductsController : ControllerBase
         _productService.RemoveProduct(id);
         return Ok();
     }
+
+    [HttpPut]
+    [Route("update")]
+    public IActionResult ChangeProduct(Guid userId, Product product)
+    {
+        var user = _context.Users.First(u => u.Id == userId);
+
+        if (user.Roles.Any(role => role == ERoles.User))
+        {
+            return Unauthorized();
+        }
+        
+        var (success, content) = _productService.UpdateProduct(product);
+
+        if (success)
+        {
+            return Ok(content);
+        }
+
+        return BadRequest(content);
+    }
 }

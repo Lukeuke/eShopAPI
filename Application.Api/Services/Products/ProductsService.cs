@@ -1,5 +1,6 @@
 using Application.Api.Data;
 using Application.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Api.Services.Products;
 
@@ -27,8 +28,7 @@ public class ProductsService : IProductsService
     {
         try
         {
-            var result = _context.Products.Where(p => p.Name.Contains(name));
-            return result.ToList();
+            return _context.Products.Where(p => p.Name.Contains(name)).ToList();
         }
         catch (Exception e)
         {
@@ -48,5 +48,20 @@ public class ProductsService : IProductsService
         var product = _context.Products.Find(id) ?? new Product();
         _context.Products.Remove(product);
         _context.SaveChanges();
+    }
+
+    public (bool success, object content) UpdateProduct(Product product)
+    {
+        var productToUpdate = _context.Products.Find(product.Id);
+
+        if (productToUpdate == null) return (false, new { message = $"Couldn't find product with id: {product.Id}" });
+
+        productToUpdate.Name = product.Name;
+        productToUpdate.Description = product.Description;
+        productToUpdate.Price = product.Price;
+        productToUpdate.Quantity = product.Quantity;
+
+        _context.SaveChanges();
+        return (true, new { message = $"Product with id {product.Id} has been updated" });
     }
 }
