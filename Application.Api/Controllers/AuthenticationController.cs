@@ -47,7 +47,7 @@ public class AuthenticationController : ControllerBase
             Roles = _dbService.GetRolesFromDb(id),
             Token = new TokenDto
             {
-                Token = content.ToString()!
+                Value = content.ToString()!
             }
         });
     }

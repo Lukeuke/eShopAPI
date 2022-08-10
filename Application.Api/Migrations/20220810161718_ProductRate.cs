@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Application.Api.Migrations
 {
-    public partial class InitialRelation : Migration
+    public partial class ProductRate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,7 +19,9 @@ namespace Application.Api.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    RateValue = table.Column<float>(type: "real", nullable: false),
+                    RateQuantity = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -35,7 +37,8 @@ namespace Application.Api.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Surname = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    Salt = table.Column<string>(type: "text", nullable: false)
+                    Salt = table.Column<string>(type: "text", nullable: false),
+                    Roles = table.Column<int[]>(type: "integer[]", nullable: false)
                 },
                 constraints: table =>
                 {

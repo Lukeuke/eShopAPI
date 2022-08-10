@@ -92,4 +92,15 @@ public class ProductsController : ControllerBase
 
         return BadRequest(content);
     }
+
+    [HttpPatch]
+    [Route("rate")]
+    public IActionResult RateProduct(int productId, float value)
+    {
+        var (success, content) = _productService.RateProduct(productId, value);
+
+        if (!success) return BadRequest(content);
+
+        return Ok(content);
+    }
 }

@@ -2,5 +2,5 @@ namespace Application.Api.DTOs.Authentication;
 
 public class TokenDto
 {
-    public string Token { get; set; }
+    public string Value { get; set; }
 }

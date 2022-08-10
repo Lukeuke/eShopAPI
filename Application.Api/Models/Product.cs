@@ -10,6 +10,8 @@ public class Product
     public string Description { get; set; }
     public decimal Price { get; set; }
     public int Quantity { get; set; }
-    
+    public float AverageRate => RateValue / RateQuantity;
+    public float RateValue { get; set; }
+    public int RateQuantity { get; set; }
     public List<User>? Users { get; set; }
 }

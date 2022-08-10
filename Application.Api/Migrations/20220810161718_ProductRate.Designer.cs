@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Api.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220719204656_InitialRelation")]
-    partial class InitialRelation
+    [Migration("20220810161718_ProductRate")]
+    partial class ProductRate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,6 +46,12 @@ namespace Application.Api.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<int>("RateQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("RateValue")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -64,6 +70,10 @@ namespace Application.Api.Migrations
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int[]>("Roles")
+                        .IsRequired()
+                        .HasColumnType("integer[]");
 
                     b.Property<string>("Salt")
                         .IsRequired()

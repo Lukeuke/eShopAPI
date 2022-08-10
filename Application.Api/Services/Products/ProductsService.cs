@@ -1,6 +1,5 @@
 using Application.Api.Data;
 using Application.Api.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Api.Services.Products;
 
@@ -63,5 +62,18 @@ public class ProductsService : IProductsService
 
         _context.SaveChanges();
         return (true, new { message = $"Product with id {product.Id} has been updated" });
+    }
+
+    public (bool success, object content) RateProduct(int id, float rate)
+    {
+        
+        var product = _context.Products.FirstOrDefault(p => p.Id == id);
+        if (product is null) return (false, new {message = $"Couldn't find product with id: {id}"});
+
+        product.RateQuantity++;
+        product.RateValue += rate;
+
+        _context.SaveChanges();
+        return (true, new { message = $"Product with id {product.Id} has been updated with rate of {product.AverageRate}" });
     }
 }

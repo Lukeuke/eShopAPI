@@ -44,6 +44,12 @@ namespace Application.Api.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
+                    b.Property<int>("RateQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<float>("RateValue")
+                        .HasColumnType("real");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
