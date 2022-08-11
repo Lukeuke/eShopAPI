@@ -7,4 +7,5 @@ public interface IOrderService
     void AddProduct(int id, Guid userId);
     Order GetOrder(Guid id);
     void RemoveProduct(int id, Guid userId);
+    (bool successs, object content) FinishOrder(Guid id);
 }

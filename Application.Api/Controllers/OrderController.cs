@@ -7,7 +7,6 @@ namespace Application.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
@@ -35,5 +34,15 @@ public class OrderController : ControllerBase
     {
         _orderService.RemoveProduct(id, userId);
         return Ok(new { Message = "Product has been removed from your cart" });
+    }
+
+    [HttpDelete("finish")]
+    public IActionResult FinishOrder(Guid id)
+    {
+        var (success, content) = _orderService.FinishOrder(id);
+
+        if (!success) return BadRequest(content);
+        
+        return Ok(content);
     }
 }

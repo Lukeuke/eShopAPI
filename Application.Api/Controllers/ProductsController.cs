@@ -24,15 +24,17 @@ public class ProductsController : ControllerBase
     public IActionResult AddProduct(Product product, Guid userId)
     {
         // TODO: Make this as attribute
-        var user = _context.Users.First(u => u.Id == userId);
+        var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 
+        if (user is null) return BadRequest(new { message = $"User with this id: {userId} does not exits. "});
+        
         if (user.Roles.Any(role => role == ERoles.User))
         {
             return Unauthorized();
         }
         
         _productService.AddProduct(product);
-        return Ok();
+        return Ok( new { message = "Product has been added."});
     }
 
     [HttpGet]
@@ -61,8 +63,10 @@ public class ProductsController : ControllerBase
     public IActionResult RemoveProduct(int id, Guid userId)
     {
         // TODO: Make this as attribute
-        var user = _context.Users.First(u => u.Id == userId);
+        var user = _context.Users.FirstOrDefault(u => u.Id == userId);
 
+        if (user is null) return BadRequest(new { message = $"User with this id: {userId} does not exits. "});
+        
         if (user.Roles.Any(role => role == ERoles.User))
         {
             return Unauthorized();
