@@ -1,5 +1,6 @@
 using System.Text;
 using Application.Api.Data;
+using Application.Api.Installers;
 using Application.Api.Models;
 using Application.Api.Services.Account;
 using Application.Api.Services.Data;
@@ -31,6 +32,10 @@ builder.Services.AddScoped<IDatabaseService, DatabaseService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderBuilder, OrderBuilder>();
 builder.Services.AddScoped<IAccountActionsService, AccountActionsService>();
+
+// Redis
+IInstaller cacheInstaller = new CacheInstaller();
+cacheInstaller.InstallServices(builder.Services, builder.Configuration);
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
     options.TokenValidationParameters = new TokenValidationParameters

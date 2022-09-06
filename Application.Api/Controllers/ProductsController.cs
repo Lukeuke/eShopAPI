@@ -1,3 +1,4 @@
+using Application.Api.Attributes;
 using Application.Api.Authorization;
 using Application.Api.Data;
 using Application.Api.Models;
@@ -19,8 +20,7 @@ public class ProductsController : ControllerBase
         _context = context;
     }
 
-    [HttpPost]
-    [Route("add")]
+    [HttpPost("Add")]
     public IActionResult AddProduct(Product product, Guid userId)
     {
         // TODO: Make this as attribute
@@ -37,29 +37,28 @@ public class ProductsController : ControllerBase
         return Ok( new { message = "Product has been added."});
     }
 
-    [HttpGet]
-    [Route("all")]
+    [HttpGet("All")]
+    [Cached(600)]
     public List<Product> GetAllProducts()
     {
         return _productService.GetAllProducts();
     }
 
-    [HttpGet]
-    [Route("get")]
+    [HttpGet("Get")]
+    [Cached(600)]
     public Product GetProduct(int id)
     {
         return _productService.GetProduct(id);
     }
     
-    [HttpGet]
-    [Route("searchByName")]
+    [HttpGet("SearchByName")]
+    [Cached(600)]
     public List<Product> GetProductsByName(string name)
     {
         return _productService.GetProductsByName(name);
     }
 
-    [HttpDelete]
-    [Route("remove")]
+    [HttpDelete("Remove")]
     public IActionResult RemoveProduct(int id, Guid userId)
     {
         // TODO: Make this as attribute
@@ -76,8 +75,7 @@ public class ProductsController : ControllerBase
         return Ok();
     }
 
-    [HttpPut]
-    [Route("update")]
+    [HttpPut("Update")]
     public IActionResult ChangeProduct(Guid userId, Product product)
     {
         var user = _context.Users.First(u => u.Id == userId);
@@ -97,8 +95,7 @@ public class ProductsController : ControllerBase
         return BadRequest(content);
     }
 
-    [HttpPatch]
-    [Route("rate")]
+    [HttpPatch("Rate")]
     public IActionResult RateProduct(int productId, float value)
     {
         var (success, content) = _productService.RateProduct(productId, value);
@@ -107,4 +104,6 @@ public class ProductsController : ControllerBase
 
         return Ok(content);
     }
+    
+    // TODO: Comments?
 }
