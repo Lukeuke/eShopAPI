@@ -103,7 +103,15 @@ public class ProductsController : ControllerBase
         if (!success) return BadRequest(content);
 
         return Ok(content);
-    }
+    }    
     
-    // TODO: Comments?
+    [HttpPost("Comment")]
+    public IActionResult CommentProduct(int productId, Guid userId, string comment)
+    {
+        var (success, content) = _productService.CommentProduct(productId, userId, comment);
+        
+        if (!success) return BadRequest(content);
+
+        return Ok(content);
+    }
 }

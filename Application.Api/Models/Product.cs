@@ -14,4 +14,5 @@ public class Product
     public float RateValue { get; set; }
     public int RateQuantity { get; set; }
     public List<User>? Users { get; set; }
+    public List<Comment>? Comments { get; set; } 
 }

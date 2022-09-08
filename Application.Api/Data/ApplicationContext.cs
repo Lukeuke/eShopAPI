@@ -19,14 +19,9 @@ public class ApplicationContext : DbContext
         {
             eb.HasMany(u => u.Products).WithMany(p => p.Users);
         });
-
-        /*modelBuilder.Entity<Rate>(eb =>
-        {
-            eb.HasMany(r => r.Products).WithOne(p => p.Rate);
-        });*/
-
     }
 
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Comment> Comments { get; set; }
 }

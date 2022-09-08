@@ -20,4 +20,6 @@ public class User
     public List<Product>? Products { get; set; }
 
     public List<ERoles> Roles { get; init; }
+
+    public List<Comment>? Comments { get; set; }
 }

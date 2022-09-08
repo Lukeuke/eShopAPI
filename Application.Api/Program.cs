@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Application.Api.Data;
 using Application.Api.Installers;
 using Application.Api.Models;
@@ -6,6 +7,7 @@ using Application.Api.Services.Account;
 using Application.Api.Services.Data;
 using Application.Api.Services.Orders;
 using Application.Api.Services.Products;
+using Application.Api.Services.Redis;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

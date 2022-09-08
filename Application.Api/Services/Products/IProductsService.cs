@@ -11,4 +11,5 @@ public interface IProductsService
     void RemoveProduct(int id);
     (bool success, object content) UpdateProduct(Product product);
     (bool success, object content) RateProduct(int id, float rate);
+    (bool success, object content) CommentProduct(int productId, Guid userId, string comment);
 }

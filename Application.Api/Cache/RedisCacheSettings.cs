@@ -3,6 +3,6 @@ namespace Application.Api.Cache;
 public class RedisCacheSettings
 {
     public bool Enabled { get; set; }
-    public string ConnectionString { get; set; } = default!;
+    public string ConnectionString { get; set; }
     
 }
