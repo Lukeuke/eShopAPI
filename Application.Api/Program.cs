@@ -35,6 +35,11 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderBuilder, OrderBuilder>();
 builder.Services.AddScoped<IAccountActionsService, AccountActionsService>();
 
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
+
 // Redis
 IInstaller cacheInstaller = new CacheInstaller();
 cacheInstaller.InstallServices(builder.Services, builder.Configuration);
