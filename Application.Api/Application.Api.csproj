@@ -25,4 +25,8 @@
       <Folder Include="Migrations" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Application.SMTP\Application.SMTP.csproj" />
+    </ItemGroup>
+
 </Project>

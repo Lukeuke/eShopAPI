@@ -4,5 +4,5 @@ namespace Application.SMTP.Services;
 
 public interface ISmtpService
 {
-    void SendEmail(RequestDto request);
+    (bool success, object content) SendEmail(RequestDto request);
 }

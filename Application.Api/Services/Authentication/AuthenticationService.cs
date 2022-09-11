@@ -19,18 +19,21 @@ public class AuthenticationService : IAuthenticationService
         _context = context;
     }
     
-    public (bool success, object content) Register(string username, string password, string name, string surname)
+    public (bool success, object content) Register(string username, string password, string name, string surname, string email)
     {
         if (_context.Users.Any(u => u.Username == username))
             return (false, new { message = "Username not available"} );
 
         if (password.Length < 8) return (false, new { message = "Password should be at least 8 characters long!" });
 
+        // TODO: CHECK IF EMAIL IS VALID
+        
         var user = new User
         {
             Username = username,
             PasswordHash = password,
             Name = name,
+            Email = email,
             Surname = surname,
             Roles = new List<ERoles> { ERoles.User }
         };

@@ -21,7 +21,7 @@ public class AuthenticationController : ControllerBase
     [HttpPost("register")]
     public IActionResult Register(RegisterRequestDto requestDto)
     {
-        var (success, content) = _authService.Register(requestDto.Username, requestDto.Password, requestDto.Name, requestDto.Surname);
+        var (success, content) = _authService.Register(requestDto.Username, requestDto.Password, requestDto.Name, requestDto.Surname, requestDto.Email);
         if (!success) return BadRequest(content);
 
         var loginDto = new LoginRequestDto

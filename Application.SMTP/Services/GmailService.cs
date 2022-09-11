@@ -11,8 +11,13 @@ public class GmailService :  ISmtpService
     {
         SendEmail(request);
     }
+
+    public GmailService()
+    {
+        
+    }
     
-    public void SendEmail(RequestDto request)
+    public (bool success, object content) SendEmail(RequestDto request)
     {
         var workingDirectory = Environment.CurrentDirectory;
         var serialized = File.ReadAllText(workingDirectory + @"\settings.json");
@@ -43,12 +48,12 @@ public class GmailService :  ISmtpService
         try
         {
             smtp.Send(mailMessage);
-            Console.WriteLine("Sent!");
+            return new ValueTuple<bool, object>(true, new { Message = "Mail was sent" });
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+            return new ValueTuple<bool, object>(false, new { Message = "Mail was not sent" });
         }
-        
     }
 }

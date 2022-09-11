@@ -1,13 +1,15 @@
 using System.Text;
-using System.Text.Json.Serialization;
 using Application.Api.Data;
 using Application.Api.Installers;
 using Application.Api.Models;
 using Application.Api.Services.Account;
 using Application.Api.Services.Data;
+using Application.Api.Services.MailingService;
+using Application.Api.Services.Newsletter;
 using Application.Api.Services.Orders;
 using Application.Api.Services.Products;
 using Application.Api.Services.Redis;
+using Application.SMTP;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +30,8 @@ builder.Services.AddDbContext<ApplicationContext>(o
     => o.UseNpgsql(builder.Configuration.GetConnectionString("DbString")));
 
 // Add Services
+#region API_Services
+
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IDatabaseService, DatabaseService>();
@@ -35,10 +39,21 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderBuilder, OrderBuilder>();
 builder.Services.AddScoped<IAccountActionsService, AccountActionsService>();
 
-builder.Services.AddControllers().AddJsonOptions(options =>
+#endregion
+
+#region Mailing_Services
+
+builder.Services.AddScoped<IMailBuilder, MailBuilder>();
+builder.Services.AddTransient<IMailingService, MailingService>();
+builder.Services.AddTransient<INewsletterService, NewsletterService>();
+
+#endregion
+
+// Sometimes this should be added, cuz sometimes somehow it cant serialize json
+/*builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-});
+});*/
 
 // Redis
 IInstaller cacheInstaller = new CacheInstaller();

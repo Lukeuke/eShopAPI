@@ -8,12 +8,13 @@ public class MailBuilder : IMailBuilder
 {
     private ISmtpService _service = null!;
     
-    public ISmtpService Build(MailType type, RequestDto request)
+    public ISmtpService Build(MailType type, RequestDto? request)
     {
         switch (type)
         {
             case MailType.Gmail:
-                _service = new GmailService(request);
+                if (request != null) _service = new GmailService(request);
+                _service = new GmailService();
                 break;
             default:
                 break;
@@ -25,5 +26,5 @@ public class MailBuilder : IMailBuilder
 
 public interface IMailBuilder
 {
-    public ISmtpService Build(MailType type, RequestDto request);
+    public ISmtpService Build(MailType type, RequestDto? request);
 }

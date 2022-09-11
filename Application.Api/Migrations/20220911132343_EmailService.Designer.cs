@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Api.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220906201733_ProductComments")]
-    partial class ProductComments
+    [Migration("20220911132343_EmailService")]
+    partial class EmailService
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -52,7 +52,32 @@ namespace Application.Api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Application.Api.Models.Notifications<string, bool>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseSerialColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("Value")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications<string, bool>");
                 });
 
             modelBuilder.Entity("Application.Api.Models.Product", b =>
@@ -93,6 +118,10 @@ namespace Application.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -158,6 +187,13 @@ namespace Application.Api.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Application.Api.Models.Notifications<string, bool>", b =>
+                {
+                    b.HasOne("Application.Api.Models.User", null)
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("ProductUser", b =>
                 {
                     b.HasOne("Application.Api.Models.Product", null)
@@ -181,6 +217,8 @@ namespace Application.Api.Migrations
             modelBuilder.Entity("Application.Api.Models.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }
