@@ -1,4 +1,5 @@
 using Application.Api.Models;
+using Application.Api.Models.Orders;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Api.Data;
@@ -24,4 +25,5 @@ public class ApplicationContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Comment> Comments { get; set; }
+    public DbSet<Order> Orders { get; set; }
 }

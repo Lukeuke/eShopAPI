@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using Application.Api.Data;
 using Application.Api.Installers;
 using Application.Api.Models;
@@ -50,10 +51,10 @@ builder.Services.AddTransient<INewsletterService, NewsletterService>();
 #endregion
 
 // Sometimes this should be added, cuz sometimes somehow it cant serialize json
-/*builder.Services.AddControllers().AddJsonOptions(options =>
+builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-});*/
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 // Redis
 IInstaller cacheInstaller = new CacheInstaller();
