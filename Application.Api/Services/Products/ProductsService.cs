@@ -1,6 +1,7 @@
 using System.Globalization;
 using Application.Api.Data;
 using Application.Api.Models;
+using Application.Api.Services.Newsletter;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Api.Services.Products;
@@ -8,10 +9,12 @@ namespace Application.Api.Services.Products;
 public class ProductsService : IProductsService
 {
     private readonly ApplicationContext _context;
+    private readonly INewsletterService _newsletterService;
 
-    public ProductsService(ApplicationContext context)
+    public ProductsService(ApplicationContext context, INewsletterService newsletterService)
     {
         _context = context;
+        _newsletterService = newsletterService;
     }
     
     public List<Product> GetAllProducts()
@@ -57,6 +60,9 @@ public class ProductsService : IProductsService
     public void AddProduct(Product product)
     {
         _context.Products.Add(product);
+        
+        _newsletterService.SendNotificationToAll(product);
+        
         _context.SaveChanges();
     }
 

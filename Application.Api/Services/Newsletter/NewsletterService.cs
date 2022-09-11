@@ -25,7 +25,6 @@ public class NewsletterService : INewsletterService
         {
             if (user.Notifications is null)
             {
-                // user.Notifications = new List<Notifications<string, bool>>();
                 continue;
             }
 
