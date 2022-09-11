@@ -30,7 +30,7 @@ public class NewsletterService : INewsletterService
 
             foreach (var notifications in user.Notifications)
             {
-                if (notifications.Key != nameof(ENotificationType.ProductAdded)) continue;
+                if (notifications.Key != nameof(ENotificationType.ProductAdded) || notifications.Value == false) continue;
 
                 var request = new RequestDto
                 {
