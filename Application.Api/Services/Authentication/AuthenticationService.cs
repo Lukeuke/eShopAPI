@@ -4,6 +4,7 @@ using System.Text;
 using Application.Api.Authorization;
 using Application.Api.Data;
 using Application.Api.Models;
+using Application.SMTP.Helpers;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Application.Api.Services.Authentication;
@@ -26,7 +27,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (password.Length < 8) return (false, new { message = "Password should be at least 8 characters long!" });
 
-        // TODO: CHECK IF EMAIL IS VALID
+        if(!EmailValidator.Validate(email)) return (false, new { message = "Email is not correct" });
         
         var user = new User
         {

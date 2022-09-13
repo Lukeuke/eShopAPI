@@ -18,10 +18,11 @@ public static class MailHelper
         
         foreach (var orderProduct in order.Products!)
         {
-            sb.Append(@$"
-                        <h3> {orderProduct.Name} </h3>
-                        <p> {orderProduct.Price.ToString(CultureInfo.InvariantCulture)} Zł.</p>
-                        <hr>
+            sb.Append(@$" <div style=""text-align: center;""> 
+                            <h3> {orderProduct.Name} </h3>
+                            <p> {orderProduct.Price.ToString(CultureInfo.InvariantCulture)} Zł.</p>
+                            <hr style=""width: 50%;"">
+                          </div>
                      ");
         }
 
