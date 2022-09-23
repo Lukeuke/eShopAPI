@@ -60,14 +60,21 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 IInstaller cacheInstaller = new CacheInstaller();
 cacheInstaller.InstallServices(builder.Services, builder.Configuration);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
-    options.TokenValidationParameters = new TokenValidationParameters
+var isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"), "development", StringComparison.InvariantCultureIgnoreCase);
+
+Console.WriteLine($"Development: {isDevelopment}");
+
+if (!isDevelopment)
 {
-    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
-    ValidateIssuerSigningKey = true,
-    ValidateAudience = false,
-    ValidateIssuer = false
-});
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
+            ValidateIssuerSigningKey = true,
+            ValidateAudience = false,
+            ValidateIssuer = false
+        });
+}
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -84,7 +84,12 @@ namespace Application.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -105,9 +110,6 @@ namespace Application.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uuid");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
@@ -121,8 +123,6 @@ namespace Application.Api.Migrations
                         .HasColumnType("real");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Products");
                 });
@@ -167,6 +167,21 @@ namespace Application.Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrdersId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrdersId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("OrderProduct");
+                });
+
             modelBuilder.Entity("ProductUser", b =>
                 {
                     b.Property<int>("ProductsId")
@@ -208,11 +223,30 @@ namespace Application.Api.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Application.Api.Models.Product", b =>
+            modelBuilder.Entity("Application.Api.Models.Orders.Order", b =>
+                {
+                    b.HasOne("Application.Api.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrderProduct", b =>
                 {
                     b.HasOne("Application.Api.Models.Orders.Order", null)
-                        .WithMany("Products")
-                        .HasForeignKey("OrderId");
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Application.Api.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProductUser", b =>
@@ -230,11 +264,6 @@ namespace Application.Api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Application.Api.Models.Orders.Order", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("Application.Api.Models.Product", b =>
                 {
                     b.Navigation("Comments");
@@ -245,6 +274,8 @@ namespace Application.Api.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

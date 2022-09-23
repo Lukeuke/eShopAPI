@@ -8,4 +8,6 @@ public interface IOrderService
     Order GetOrder(Guid id);
     void RemoveProduct(int id, Guid userId);
     (bool successs, object content) FinishOrder(Guid id);
+    (bool successs, object content) GetCompletedOrder(Guid id);
+    (bool successs, object content) GetCompletedOrderById(Guid orderId);
 }

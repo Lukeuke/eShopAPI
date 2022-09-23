@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+# Copy csproj and restore as distinct layers
+WORKDIR /Application.Api
+COPY ./Application.Api .
+COPY ./Application.SMTP ../Application.SMTP
+RUN dotnet restore
+
+RUN dotnet publish -c Release -o out
+
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:6.0 AS runtime
+
+WORKDIR /Application.Api
+COPY --from=build-env /Application.Api/ ./
+
+ENTRYPOINT ["dotnet", "out/Application.Api.dll"]

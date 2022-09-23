@@ -25,6 +25,8 @@ public class AuthenticationService : IAuthenticationService
         if (_context.Users.Any(u => u.Username == username))
             return (false, new { message = "Username not available"} );
 
+        if (string.IsNullOrEmpty(username)) return (false, new {message = "Username cannot be empty"});
+
         if (password.Length < 8) return (false, new { message = "Password should be at least 8 characters long!" });
 
         if(!EmailValidator.Validate(email)) return (false, new { message = "Email is not correct" });

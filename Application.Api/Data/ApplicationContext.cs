@@ -19,6 +19,18 @@ public class ApplicationContext : DbContext
         modelBuilder.Entity<User>(eb =>
         {
             eb.HasMany(u => u.Products).WithMany(p => p.Users);
+            eb.HasMany(x => x.Orders);
+        });
+        
+        modelBuilder.Entity<Order>(eb =>
+        {
+            eb.HasMany(x => x.Products);
+            eb.HasOne(x => x.User);
+        });
+
+        modelBuilder.Entity<Product>(eb =>
+        {
+            eb.HasMany(x => x.Orders);
         });
     }
 

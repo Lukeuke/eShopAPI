@@ -20,7 +20,7 @@ public class GmailService :  ISmtpService
     public (bool success, object content) SendEmail(RequestDto request)
     {
         var workingDirectory = Environment.CurrentDirectory;
-        var serialized = File.ReadAllText(workingDirectory + @"\settings.json");
+        var serialized = File.ReadAllText(workingDirectory + @"/settings.json");
         var json = JsonConvert.DeserializeObject<SettingsDto>(serialized);
 
         var mail = json!.Username;

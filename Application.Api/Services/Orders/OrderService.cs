@@ -44,9 +44,10 @@ public class OrderService : IOrderService
 
     public (bool successs, object content) FinishOrder(Guid id)
     {
-        var user = _context.Users.Include(x => x.Products).First(u => u.Id == id);
+        var user = _context.Users.Include(x => x.Products).Include(o => o.Orders).First(u => u.Id == id);
 
         if (user.Products == null) return (true, new {message = "No products were found in your cart"});
+        if (user.Orders == null) return (true, new {message = "No orders were found in your cart"});
         
         foreach (var product in user.Products)
         {
@@ -64,9 +65,34 @@ public class OrderService : IOrderService
         });
 
         user.Products = new List<Product>();
-
+        user.Orders.Add(order);
+        _context.Orders.Add(order);
+        
         _context.SaveChanges();
 
         return (true, new { message = "Your order was finished" });
+    }
+
+    public (bool successs, object content) GetCompletedOrder(Guid id)
+    {
+        var user = _context.Users.Include(x => x.Orders)
+            .Include(x => x.Products)
+            .FirstOrDefault(x => x.Id == id);
+        
+        if (user is null) return (true, new {message = $"Couldn't find user with id of {id}"});
+        if (user.Orders is null) return (true, new {message = $"Couldn't find orders from user of id {id}"});
+
+        return (true, user.Orders);
+    }
+
+    public (bool successs, object content) GetCompletedOrderById(Guid orderId)
+    {
+        var order = _context.Orders.Include(x => x.User)
+            .Include(x => x.Products)
+            .FirstOrDefault(x => x.Id == orderId);
+        
+        if (order is null) return (true, new {message = $"Couldn't find orders with id of {orderId}"});
+
+        return (true, order);
     }
 }

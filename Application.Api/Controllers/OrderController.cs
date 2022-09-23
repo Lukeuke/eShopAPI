@@ -46,4 +46,24 @@ public class OrderController : ControllerBase
         
         return Ok(content);
     }
+    
+    [HttpGet("completedOrders")]
+    public IActionResult GetCompletedOrders(Guid userId)
+    {
+        var (success, content) = _orderService.GetCompletedOrder(userId);
+        
+        if (!success) return BadRequest(content);
+        
+        return Ok(content);
+    }
+    
+    [HttpGet("completedOrder")]
+    public IActionResult GetCompletedOrder(Guid orderId)
+    {
+        var (success, content) = _orderService.GetCompletedOrderById(orderId);
+        
+        if (!success) return BadRequest(content);
+        
+        return Ok(content);
+    }
 }

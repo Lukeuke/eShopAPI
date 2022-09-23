@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Application.Api.Models.Orders;
 
 namespace Application.Api.Models;
 
@@ -14,5 +15,6 @@ public class Product
     public float RateValue { get; set; }
     public int RateQuantity { get; set; }
     public List<User>? Users { get; set; }
-    public List<Comment>? Comments { get; set; } 
+    public List<Comment>? Comments { get; set; }
+    public List<Order>? Orders { get; set; }
 }

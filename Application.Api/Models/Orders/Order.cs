@@ -7,6 +7,7 @@ public class Order
     [Key]
     public Guid Id { get; set; }
     public List<Product>? Products { get; set; }
+    public User User { get; set; }
 
     public decimal PriceSum()
     {

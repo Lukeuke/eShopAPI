@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  application.smtp:
+    image: ${DOCKER_REGISTERY-}eshopsmtp
+    build:
+      context: .
+      dockerfile: Application.SMTP/Dockerfile
+  application.api:
+    image: ${DOCKER_REGISTERY-}eshopapi
+    build:
+      context: .
+      dockerfile: Application.Api/Dockerfile
+    depends_on:
+      - application.smtp

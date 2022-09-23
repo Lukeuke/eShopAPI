@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Application.Api.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220911132343_EmailService")]
-    partial class EmailService
+    [Migration("20220923165431_OrdersTable")]
+    partial class OrdersTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -78,6 +78,22 @@ namespace Application.Api.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications<string, bool>");
+                });
+
+            modelBuilder.Entity("Application.Api.Models.Orders.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Application.Api.Models.Product", b =>
@@ -153,6 +169,21 @@ namespace Application.Api.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.Property<Guid>("OrdersId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrdersId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("OrderProduct");
+                });
+
             modelBuilder.Entity("ProductUser", b =>
                 {
                     b.Property<int>("ProductsId")
@@ -194,6 +225,32 @@ namespace Application.Api.Migrations
                         .HasForeignKey("UserId");
                 });
 
+            modelBuilder.Entity("Application.Api.Models.Orders.Order", b =>
+                {
+                    b.HasOne("Application.Api.Models.User", "User")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrderProduct", b =>
+                {
+                    b.HasOne("Application.Api.Models.Orders.Order", null)
+                        .WithMany()
+                        .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Application.Api.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProductUser", b =>
                 {
                     b.HasOne("Application.Api.Models.Product", null)
@@ -219,6 +276,8 @@ namespace Application.Api.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Notifications");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
