@@ -1,9 +1,13 @@
+using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Application.Api.Authorization;
 using Application.Api.Data;
 using Application.Api.Models;
+using Application.Api.Services.MailingService;
+using Application.Api.Services.Newsletter;
+using Application.SMTP.Dtos;
 using Application.SMTP.Helpers;
 using Microsoft.IdentityModel.Tokens;
 
@@ -13,11 +17,13 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly Settings _settings;
     private readonly ApplicationContext _context;
+    private readonly IMailingService _mailingService;
 
-    public AuthenticationService(Settings settings, ApplicationContext context)
+    public AuthenticationService(Settings settings, ApplicationContext context, IMailingService mailingService)
     {
         _settings = settings;
         _context = context;
+        _mailingService = mailingService;
     }
     
     public (bool success, object content) Register(string username, string password, string name, string surname, string email)
@@ -38,6 +44,7 @@ public class AuthenticationService : IAuthenticationService
             Name = name,
             Email = email,
             Surname = surname,
+            CreatedOn = DateTime.Now.ToString(CultureInfo.CurrentCulture),
             Roles = new List<ERoles> { ERoles.User }
         };
 
@@ -46,6 +53,13 @@ public class AuthenticationService : IAuthenticationService
         _context.Add(user);
         _context.SaveChanges();
 
+        _mailingService.SendMail(new RequestDto
+        {
+            ToAddress = email,
+            Subject = MailHelper.GenerateAccountCreationSubject(),
+            Body = MailHelper.GenerateAccountCreationBody()
+        });
+        
         return (true, string.Empty);
     }
 

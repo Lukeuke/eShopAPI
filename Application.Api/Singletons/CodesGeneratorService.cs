@@ -2,11 +2,11 @@ namespace Application.Api.Singletons;
 
 public sealed class CodesGeneratorService : IDisposable
 {
-    public Dictionary<string, int> Codes { get; set; }
+    public Dictionary<int, string> Codes { get; set; }
     
     private CodesGeneratorService()
     {
-        Codes = new Dictionary<string, int>();
+        Codes = new Dictionary<int, string>();
     }
 
     ~CodesGeneratorService()

@@ -5,7 +5,6 @@ using Application.Api.Services.MailingService;
 using Application.Api.Services.Newsletter;
 using Application.Api.Singletons;
 using Application.SMTP.Dtos;
-using Application.SMTP.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Api.Controllers;
@@ -29,12 +28,12 @@ public class AuthenticationController : ControllerBase
     public IActionResult Register(RegisterRequestDto requestDto, int code)
     {
         var codes = CodesGeneratorService.GetInstance().Codes;
-       
-        var find = codes.Keys.First(x => x == requestDto.Email);
+
+        var (key, email) = codes.First(x => x.Key == code);
         
-        if (codes[find] != code) return BadRequest(new {Message = "Wrong code"});
+        if (key != code) return BadRequest(new {Message = "Wrong code"});
         
-        var (success, content) = _authService.Register(requestDto.Username, requestDto.Password, requestDto.Name, requestDto.Surname, requestDto.Email);
+        var (success, content) = _authService.Register(requestDto.Username, requestDto.Password, requestDto.Name, requestDto.Surname, email);
         if (!success) return BadRequest(content);
 
         var loginDto = new LoginRequestDto
@@ -43,7 +42,7 @@ public class AuthenticationController : ControllerBase
             Password = requestDto.Password
         };
 
-        codes.Remove(find); // Removes the code
+        codes.Remove(key); // Removes the code
         
         return Login(loginDto);
     }
@@ -68,13 +67,13 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("register/request")]
-    public IActionResult RegisterRequest(RegisterRequestDto requestDto)
+    public IActionResult RegisterRequest([FromBody] string email)
     {
         var code = Random.Shared.Next();
         
         var request = new RequestDto
         {
-            ToAddress = requestDto.Email,
+            ToAddress = email,
             Subject = MailHelper.GenerateRegisterSubject(),
             Body = MailHelper.GenerateRegisterBody(code)
         };
@@ -83,7 +82,7 @@ public class AuthenticationController : ControllerBase
         
         if (!success) return BadRequest(content);
 
-        CodesGeneratorService.GetInstance().Codes.Add(requestDto.Email, code);
+        CodesGeneratorService.GetInstance().Codes.Add(code, email);
         
         return Ok(content);
     }

@@ -52,4 +52,19 @@ public static class MailHelper
 
         return sb.ToString();
     }
+
+    public static string GenerateAccountCreationSubject()
+    {
+        return "Account was Created - eShopAPI";
+    }
+
+    public static string GenerateAccountCreationBody()
+    {
+
+        return @"
+                    <div style=""text-align: center;""> 
+                        <p>Your account was created.</p>
+                     </div>
+                  ";
+    }
 }

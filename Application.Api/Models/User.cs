@@ -20,6 +20,7 @@ public class User
     public string Email { get; set; }
     public string PasswordHash { get; set; }
     public string Salt { get; set; }
+    public string CreatedOn { get; set; }
 
     public List<Product>? Products { get; set; }
 
