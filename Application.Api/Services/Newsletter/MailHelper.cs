@@ -30,4 +30,26 @@ public static class MailHelper
         
         return sb.ToString();
     }
+    
+    public static string GenerateRegisterSubject()
+    {
+        var sb = new StringBuilder();
+
+        sb.Append("Account creation");
+
+        return sb.ToString();
+    }
+    
+    public static string GenerateRegisterBody(int code)
+    {
+        var sb = new StringBuilder();
+
+        sb.Append($@"
+                    <div style=""text-align: center;""> 
+                        <p>Your unique code: {code}</p>
+                     </div>
+                  ");
+
+        return sb.ToString();
+    }
 }
