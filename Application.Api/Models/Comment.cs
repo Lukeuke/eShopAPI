@@ -7,4 +7,5 @@ public class Comment
     public User Author { get; set; }
     public Product Product { get; set; }
     public string TimeCreated { get; set; }
+    public int LikesCount { get; set; }
 }
