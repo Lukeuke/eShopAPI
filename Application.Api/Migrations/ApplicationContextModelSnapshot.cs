@@ -37,6 +37,9 @@ namespace Application.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("LikesCount")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
@@ -51,6 +54,30 @@ namespace Application.Api.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Application.Api.Models.Invoice", b =>
+                {
+                    b.Property<Guid>("Number")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("DateOfIssue")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("PayingMethod")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Number");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("Invoices");
                 });
 
             modelBuilder.Entity("Application.Api.Models.Notifications<string, bool>", b =>
@@ -83,6 +110,9 @@ namespace Application.Api.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<int>("ShippingType")
+                        .HasColumnType("integer");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
@@ -220,6 +250,17 @@ namespace Application.Api.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Application.Api.Models.Invoice", b =>
+                {
+                    b.HasOne("Application.Api.Models.Orders.Order", "Order")
+                        .WithOne("Invoice")
+                        .HasForeignKey("Application.Api.Models.Invoice", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Application.Api.Models.Notifications<string, bool>", b =>
                 {
                     b.HasOne("Application.Api.Models.User", null)
@@ -265,6 +306,12 @@ namespace Application.Api.Migrations
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Application.Api.Models.Orders.Order", b =>
+                {
+                    b.Navigation("Invoice")
                         .IsRequired();
                 });
 

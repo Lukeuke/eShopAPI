@@ -1,4 +1,4 @@
-namespace Application.Api.Singletons;
+namespace Application.Api.Services.Generators;
 
 public sealed class CodesGeneratorService : IDisposable
 {

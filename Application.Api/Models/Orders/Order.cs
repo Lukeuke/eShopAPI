@@ -7,8 +7,6 @@ public class Order
 {
     [Key]
     public Guid Id { get; set; }
-
-    public string PlacedOn { get; set; }
     public EShippingType ShippingType { get; set; }
     public List<Product>? Products { get; set; }
     public User User { get; set; }

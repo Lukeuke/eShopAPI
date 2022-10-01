@@ -9,6 +9,6 @@ builder.Services.AddScoped<IMailBuilder, MailBuilder>();
 
 var app = builder.Build();
 
-app.MapGet("/{type}", ([FromServices] IMailBuilder mailBuilder, [FromRoute] MailType type, [FromBody] RequestDto request) => mailBuilder.Build(type, request));
+app.MapGet("/{type}", ([FromServices] IMailBuilder mailBuilder, [FromRoute] MailType type, [FromBody] RequestDto request) => mailBuilder.Build(type, request, false, null));
 
 app.Run();

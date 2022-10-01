@@ -26,6 +26,7 @@ public class ApplicationContext : DbContext
         {
             eb.HasMany(x => x.Products);
             eb.HasOne(x => x.User);
+            eb.HasOne(x => x.Invoice).WithOne(x => x.Order).HasForeignKey<Invoice>(x => x.OrderId);
         });
 
         modelBuilder.Entity<Product>(eb =>
@@ -38,4 +39,5 @@ public class ApplicationContext : DbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Comment> Comments { get; set; }
     public DbSet<Order> Orders { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
 }

@@ -1,6 +1,9 @@
+using System.Globalization;
 using Application.Api.Data;
+using Application.Api.Enums;
 using Application.Api.Models;
 using Application.Api.Models.Orders;
+using Application.Api.Services.Generators;
 using Application.Api.Services.MailingService;
 using Application.Api.Services.Newsletter;
 using Application.Api.Services.Products;
@@ -15,13 +18,19 @@ public class OrderService : IOrderService
     private readonly IOrderBuilder _orderBuilder;
     private readonly ApplicationContext _context;
     private readonly IMailingService _mailingService;
+    private readonly IFileGenerator _fileGenerator;
 
-    public OrderService(IProductsService productsService, IOrderBuilder orderBuilder, ApplicationContext context, IMailingService mailingService)
+    public OrderService(IProductsService productsService, 
+        IOrderBuilder orderBuilder, 
+        ApplicationContext context, 
+        IMailingService mailingService,
+        IFileGenerator fileGenerator)
     {
         _productsService = productsService;
         _orderBuilder = orderBuilder;
         _context = context;
         _mailingService = mailingService;
+        _fileGenerator = fileGenerator;
     }
     
     public void AddProduct(int id, Guid userId)
@@ -33,7 +42,14 @@ public class OrderService : IOrderService
 
     public Order GetOrder(Guid id)
     {
-        return _orderBuilder.GetOrder(id);
+        var user = _context.Users.Include(x => x.Products).FirstOrDefault(x => x.Id == id);
+
+        var order = new Order
+        {
+            Products = user.Products
+        };
+
+        return order;
     }
 
     public void RemoveProduct(int id, Guid userId)
@@ -42,7 +58,7 @@ public class OrderService : IOrderService
         _orderBuilder.RemoveProduct(product, userId);
     }
 
-    public (bool successs, object content) FinishOrder(Guid id)
+    public (bool successs, object content) FinishOrder(Guid id, EPayingMethod payingMethod, EShippingType shippingType)
     {
         var user = _context.Users.Include(x => x.Products).Include(o => o.Orders).First(u => u.Id == id);
 
@@ -54,15 +70,23 @@ public class OrderService : IOrderService
             product.Quantity--;
         }
 
-        var order = GetOrder(id);
+        var order = _orderBuilder.GetOrder(id, shippingType);
         order.Id = Guid.NewGuid();
+
+        var invoice = new Invoice
+        {
+            Number = order.Id,
+            DateOfIssue = DateTime.Now.ToString(CultureInfo.InvariantCulture),
+            Order = order,
+            PayingMethod = payingMethod
+        };
         
-        _mailingService.SendMail(new RequestDto
+        _mailingService.SendMailWithAttachment(new RequestDto
         {
             ToAddress = user.Email,
             Body = MailHelper.GenerateBody(order),
             Subject = MailHelper.GenerateSubject(order)
-        });
+        }, (string) _fileGenerator.Generate(invoice, MailHelper.GenerateInvoicePdfHtml(invoice)));
 
         user.Products = new List<Product>();
         user.Orders.Add(order);

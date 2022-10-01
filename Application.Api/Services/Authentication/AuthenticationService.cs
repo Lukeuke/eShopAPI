@@ -67,7 +67,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var user = _context.Users.SingleOrDefault(p => p.Username == username);
 
-        if (user == null) return (false, new { message = "Invalid username" });
+        if (user == null) return (false, new { message = "Couldn't find user with id username" });
 
         if (user.PasswordHash != AuthenticationHelper.GenerateHash(password, user.Salt))
             return (false, new { message = "Invalid password" });

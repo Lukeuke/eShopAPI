@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+      <PackageReference Include="Select.HtmlToPdf.NetCore" Version="22.1.0" />
     </ItemGroup>
 
 </Project>

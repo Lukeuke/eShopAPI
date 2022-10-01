@@ -1,3 +1,4 @@
+using Application.Api.Enums;
 using Application.Api.Models.Orders;
 using Application.Api.Services.Orders;
 using Microsoft.AspNetCore.Authorization;
@@ -38,9 +39,9 @@ public class OrderController : ControllerBase
     }
 
     [HttpDelete("finish")]
-    public IActionResult FinishOrder(Guid id)
+    public IActionResult FinishOrder(Guid id, EPayingMethod payingMethod, EShippingType shippingType)
     {
-        var (success, content) = _orderService.FinishOrder(id);
+        var (success, content) = _orderService.FinishOrder(id, payingMethod, shippingType);
 
         if (!success) return BadRequest(content);
         

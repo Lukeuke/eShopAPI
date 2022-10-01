@@ -4,7 +4,9 @@ using Application.Api.Data;
 using Application.Api.Installers;
 using Application.Api.Models;
 using Application.Api.Services.Account;
+using Application.Api.Services.Authentication;
 using Application.Api.Services.Data;
+using Application.Api.Services.Generators;
 using Application.Api.Services.MailingService;
 using Application.Api.Services.Newsletter;
 using Application.Api.Services.Orders;
@@ -40,6 +42,9 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderBuilder, OrderBuilder>();
 builder.Services.AddScoped<IAccountActionsService, AccountActionsService>();
 
+builder.Services.AddScoped<ILoginHelper, LoginHelper>();
+builder.Services.AddScoped<IFileGenerator, PdfGenerator>();
+
 #endregion
 
 #region Mailing_Services
@@ -64,17 +69,14 @@ var isDevelopment = string.Equals(Environment.GetEnvironmentVariable("ASPNETCORE
 
 Console.WriteLine($"Development: {isDevelopment}");
 
-if (!isDevelopment)
-{
-    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
-            ValidateIssuerSigningKey = true,
-            ValidateAudience = false,
-            ValidateIssuer = false
-        });
-}
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.BearerKey)),
+        ValidateIssuerSigningKey = true,
+        ValidateAudience = false,
+        ValidateIssuer = false
+    });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

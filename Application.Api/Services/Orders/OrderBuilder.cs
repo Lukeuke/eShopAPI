@@ -1,4 +1,5 @@
 using Application.Api.Data;
+using Application.Api.Enums;
 using Application.Api.Models;
 using Application.Api.Models.Orders;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public class OrderBuilder : IOrderBuilder
 
     public void AddProduct(Product product, Guid id)
     {
+        // TODO: product count -> how many
         var user = _context.Users.First(u => u.Id == id);
 
         var p = _context.Products.First(p => p.Id == product.Id);
@@ -32,23 +34,23 @@ public class OrderBuilder : IOrderBuilder
         _context.SaveChanges();
     }
 
-    private Order BuildOrder(Guid id)
+    private Order BuildOrder(Guid id, EShippingType? shippingType)
     {
-        var user = _context.Users.Include(x => x.Products).Where(u => u.Id == id).Select(x => x.Products);
+        var user = _context.Users.Include(x => x.Products).FirstOrDefault(u => u.Id == id);
 
-        var products = user.ToList();
-        
         var order = new Order
         {
-            Products = products[0]
+            User = user!,
+            Products = user!.Products,
+            ShippingType = (EShippingType) shippingType!
         };
 
         return order;
     }
 
-    public Order GetOrder(Guid id)
+    public Order GetOrder(Guid id, EShippingType type)
     {
-        return BuildOrder(id);
+        return BuildOrder(id, type);
     }
 
     public void RemoveProduct(Product product, Guid id)

@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Application.Api.Migrations
 {
-    public partial class OrdersTable : Migration
+    public partial class Invoice : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -39,6 +39,7 @@ namespace Application.Api.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     Salt = table.Column<string>(type: "text", nullable: false),
+                    CreatedOn = table.Column<string>(type: "text", nullable: false),
                     Roles = table.Column<int[]>(type: "integer[]", nullable: false)
                 },
                 constraints: table =>
@@ -55,7 +56,8 @@ namespace Application.Api.Migrations
                     Content = table.Column<string>(type: "text", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
-                    TimeCreated = table.Column<string>(type: "text", nullable: false)
+                    TimeCreated = table.Column<string>(type: "text", nullable: false),
+                    LikesCount = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -99,6 +101,7 @@ namespace Application.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    ShippingType = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -132,6 +135,26 @@ namespace Application.Api.Migrations
                         name: "FK_ProductUser_Users_UsersId",
                         column: x => x.UsersId,
                         principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Invoices",
+                columns: table => new
+                {
+                    Number = table.Column<Guid>(type: "uuid", nullable: false),
+                    DateOfIssue = table.Column<string>(type: "text", nullable: false),
+                    PayingMethod = table.Column<int>(type: "integer", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invoices", x => x.Number);
+                    table.ForeignKey(
+                        name: "FK_Invoices_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -171,6 +194,12 @@ namespace Application.Api.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Invoices_OrderId",
+                table: "Invoices",
+                column: "OrderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Notifications<string, bool>_UserId",
                 table: "Notifications<string, bool>",
                 column: "UserId");
@@ -195,6 +224,9 @@ namespace Application.Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Invoices");
 
             migrationBuilder.DropTable(
                 name: "Notifications<string, bool>");
